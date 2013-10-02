@@ -42,7 +42,7 @@ fi
 
 echo "Setting the root password"
 cd
-passwd
+passwd || exit 1
 
 # Make a backup directory to put stuff
 if test ! -d ./backup
@@ -161,6 +161,25 @@ fi
 echo "Setting HOSTNAME to $1"
 hostname $1
 echo $1 > /etc/hostname
+
+# Generate an SSH key for github
+if test ! -f ~/.ssh/id_rsa.pub
+then
+  mkdir ~/.ssh 2>/dev/null
+  cd ~/.ssh
+  if test ! -f /usr/bin/ssh-keygen
+  then
+    echo "Installing ssh-keygen to generate ssh keys"
+    opkg update
+    opkg install openssh-keygen
+  fi
+  ssh-keygen -t rsa -C "email@lorenwest.com"
+  echo "Copy the following and paste into github:"
+  echo ""
+  cat id_rsa.pub
+  echo ""
+  cd ..
+fi
 
 # Manually set the nameserver (DHCP will be disabled)
 cd /var/lib/connman
