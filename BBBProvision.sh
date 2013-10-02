@@ -119,6 +119,24 @@ cat << THERE > .bash_profile
 PATH=\$PATH:.
 export NODE_ENV=external
 set -o vi
+alias g='git'
+alias gc-='git checkout -'
+alias gcb='g checkout'
+alias gcm='git commit -a -m '
+alias gco='gcb'
+alias gcom='git checkout master'
+alias gdt='git difftool -y origin/master..'
+alias gmb='g merge'
+alias gnb='g checkout origin/master -b'
+alias gpb='g pull'
+alias gpl='git push loren `current_git_branch`'
+alias gpm='grm && gpb `merge_branch_ids` && g push --force loren master'
+alias grb='git fetch origin; git rebase origin/master'
+alias grm='gcom; g reset --hard origin/master'
+alias gru='g remote update'
+alias gs='git status'
+alias gso='g commit --amend --signoff'
+alias gst='git status'
 THERE
 
 echo "Installing .vimrc"
@@ -173,6 +191,8 @@ then
     opkg update
     opkg install openssh-keygen
   fi
+  git config --global user.name "Loren West"
+  git config --global user.email email@lorenwest.com
   ssh-keygen -t rsa -C "email@lorenwest.com"
   echo "Copy the following and paste into github:"
   echo ""
