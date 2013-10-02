@@ -1,13 +1,13 @@
 [Unit]
 Description=Westronics Boiler
-ConditionPathExists=/home/root/westronics/boiler.js
+ConditionPathExists=/home/root/doghouse/lib/boiler/boiler.js
 
 [Service]
 StandardOutput=syslog
 StandardError=syslog
 SyslogIdentifier=boiler
 EnvironmentFile=/etc/default/node
-WorkingDirectory=/home/root/westronics
+WorkingDirectory=/home/root/doghouse/lib/boiler
 ExecStart=/usr/bin/node boiler.js
 
 [Install]
