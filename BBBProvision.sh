@@ -2,6 +2,8 @@
 
 # This provisions a BeagleBone Black the way I like it.  
 # scp it to the BBB and run as root.
+#
+#     scp BBBProvision.sh root@192.168.1.XXX/~
 
 # Set known hosts here
 cat << HERE > /etc/hosts
