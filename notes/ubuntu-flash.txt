@@ -1,0 +1,30 @@
+Flashing ubuntu
+
+  * Get an ubuntu image onto an SD:
+    * Place an SD into the mac
+    * diskutil list (get the SD device name)
+    * diskutil unmountDisk /dev/{device}
+    * sudo dd if=BBB-eMMC-flasher-debian-7.1-2013-08-26.img of=/dev/{device} bs=1m
+    * (wait for xfer) then sudo diskutil eject /dev/{device}
+    * (don't take out until eject is successful)
+
+  * Flash the BBB with the image
+    * Turn off the beaglebone
+    * place SD into the beaglebone
+    * Plug in +5v WHILE PUSHING THE BOOT button
+    * Release the boot button once the blue lights start flashing
+    * Wait 10+ minutes until all 4 blue lights are on
+    * Remove power, remove SD card, put ethernet cable in, plug in +5v
+    * It should boot to the new ubuntu
+    * Find IP address on router, and ssh root@{ip} password: root
+
+  * Install node.js (as root)
+    * apt-get install python build-essential
+    * mkdir ~/src && cd $_
+    * wget -N http://nodejs.org/dist/node-latest.tar.gz (or a specific distribution)
+    * tar xzvf node-latest.tar.gz && cd node-v*
+    * ./configure --without-snapshot (snapshotting starts faster but causes segfaults)
+    * make  (this takes about 1 hour)
+    * verify (./node -v)
+    * make install
+

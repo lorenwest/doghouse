@@ -1,0 +1,8 @@
+{
+  "name": "doghouse",
+  "version": "0.0.0",
+  "dependencies": {
+    "bonescript" : ">=0.2.4 <0.3.0",
+    "monitor-min": ">=0.5.8 <0.6.0"
+  }
+}
