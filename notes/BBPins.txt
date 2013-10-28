@@ -1,0 +1,25 @@
+All Analog pins are on P9, set to MODE3:
+P9_32	VADC (+1.8VDC)
+P9_33	AIN4
+P9_34	AGND (gnd)
+P9_35	AIN6
+P9_36	AIN5
+P9_37	AIN2
+P9_38	AIN3
+P9_39	AIN0
+P9_40	AIN1
+
+Known good GPIO pins:
+P9_11
+P9_12
+P9_13
+P9_14
+
+P9_17
+P9_18
+P9_22
+P9_21
+
+Bad GPIO pins:
+
+P9_15 - When set to output, hangs the BB
