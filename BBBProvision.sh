@@ -22,6 +22,7 @@ cat << HERE > /etc/hosts
 192.168.1.54	bb-benchtest
 192.168.1.201	hotwall-1
 192.168.1.202	hotwall-2
+140.211.169.179	feeds.angstrom-distribution.org
 HERE
 
 if test "x$1" == "x"
