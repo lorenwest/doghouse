@@ -124,22 +124,11 @@ export NODE_ENV=external
 set -o vi
 alias g='git'
 alias gc-='git checkout -'
-alias gcb='g checkout'
 alias gcm='git commit -a -m '
-alias gco='gcb'
 alias gcom='git checkout master'
-alias gdt='git difftool -y origin/master..'
-alias gmb='g merge'
-alias gnb='g checkout origin/master -b'
-alias gpb='g pull'
-alias gpl='git push loren `current_git_branch`'
-alias gpm='grm && gpb `merge_branch_ids` && g push --force loren master'
 alias grb='git fetch origin; git rebase origin/master'
-alias grm='gcom; g reset --hard origin/master'
 alias gru='g remote update'
 alias gs='git status'
-alias gso='g commit --amend --signoff'
-alias gst='git status'
 THERE
 
 echo "Installing .vimrc"
@@ -183,26 +172,39 @@ echo "Setting HOSTNAME to $1"
 hostname $1
 echo $1 > /etc/hostname
 
-# Generate an SSH key for github
-if test ! -f ~/.ssh/id_rsa.pub
+# Configure git
+if test ! -d ~/doghouse
 then
-  mkdir ~/.ssh 2>/dev/null
-  cd ~/.ssh
-  if test ! -f /usr/bin/ssh-keygen
-  then
-    echo "Installing ssh-keygen to generate ssh keys"
-    opkg update
-    opkg install openssh-keygen
-  fi
+  cd ~
+  scp root@bb-boiler:~/.ssh/ssh.tar ~/ssh.tar
+  tar xvf ssh.tar
+  rm ssh.tar
   git config --global user.name "Loren West"
   git config --global user.email email@lorenwest.com
-  ssh-keygen -t rsa -C "email@lorenwest.com"
-  echo "Copy the following and paste into github:"
-  echo ""
-  cat id_rsa.pub
-  echo ""
-  cd ..
+  git clone git@github.com:lorenwest/doghouse.git
 fi
+
+# Generate an SSH key for github
+# Commented out in exchange for above code.  Kept to know how it's done.
+# if test ! -f ~/.ssh/id_rsa.pub
+# then
+#   mkdir ~/.ssh 2>/dev/null
+#   cd ~/.ssh
+#   if test ! -f /usr/bin/ssh-keygen
+#   then
+#     echo "Installing ssh-keygen to generate ssh keys"
+#     opkg update
+#     opkg install openssh-keygen
+#   fi  
+#   git config --global user.name "Loren West"
+#   git config --global user.email email@lorenwest.com
+#   ssh-keygen -t rsa -C "email@lorenwest.com"
+#   echo "Copy the following and paste into github:"
+#   echo ""
+#   cat id_rsa.pub
+#   echo ""
+#   cd ..
+# fi
 
 # Manually set the nameserver (DHCP will be disabled)
 cd /var/lib/connman

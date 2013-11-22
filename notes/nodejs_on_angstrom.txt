@@ -26,4 +26,6 @@ make install
 
 *********** OR ************
 
-Unzip the node *.tz file into a dir, cd to that dir, and make install
+mkdir ~/node
+cd ~/node
+Unzip the node *.tz file into ~/node, cd to that dir, and make install
