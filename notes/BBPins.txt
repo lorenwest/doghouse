@@ -1,4 +1,5 @@
 All Analog pins are on P9, set to MODE3:
+
 P9_32	VADC (+1.8VDC)
 P9_33	AIN4
 P9_34	AGND (gnd)
@@ -9,17 +10,35 @@ P9_38	AIN3
 P9_39	AIN0
 P9_40	AIN1
 
-Known good GPIO pins:
-P9_11
-P9_12
-P9_13
-P9_14
+Known good GPIO pins - tested for OUTPUT (see /lib/common/pinTest.sh):
 
-P9_17
-P9_18
-P9_22
-P9_21
-
-Bad GPIO pins:
-
-P9_15 - When set to output, hangs the BB
+  {name: 'P9_11', direction: b.OUTPUT},
+  {name: 'P9_12', direction: b.OUTPUT},
+  {name: 'P9_13', direction: b.OUTPUT},
+  {name: 'P9_14', direction: b.OUTPUT},
+  {name: 'P9_15', direction: b.OUTPUT},
+  {name: 'P9_16', direction: b.OUTPUT},
+  {name: 'P9_17', direction: b.OUTPUT},
+  {name: 'P9_18', direction: b.OUTPUT},
+  {name: 'P9_21', direction: b.OUTPUT},
+  {name: 'P9_22', direction: b.OUTPUT},
+  {name: 'P9_23', direction: b.OUTPUT},
+  {name: 'P9_24', direction: b.OUTPUT},
+  {name: 'P9_26', direction: b.OUTPUT},
+  {name: 'P9_27', direction: b.OUTPUT},
+  {name: 'P9_30', direction: b.OUTPUT},
+  {name: 'P8_6', direction: b.OUTPUT},
+  {name: 'P8_7', direction: b.OUTPUT},
+  {name: 'P8_8', direction: b.OUTPUT},
+  {name: 'P8_9', direction: b.OUTPUT},
+  {name: 'P8_10', direction: b.OUTPUT},
+  {name: 'P8_11', direction: b.OUTPUT},  // Used by eMMC flash memory card
+  {name: 'P8_12', direction: b.OUTPUT},  // Used by eMMC flash memory card
+  {name: 'P8_13', direction: b.OUTPUT},  // Used by eMMC flash memory card
+  {name: 'P8_14', direction: b.OUTPUT},  // Used by eMMC flash memory card
+  {name: 'P8_15', direction: b.OUTPUT},  // Used by eMMC flash memory card
+  {name: 'P8_16', direction: b.OUTPUT},  // Used by eMMC flash memory card
+  {name: 'P8_17', direction: b.OUTPUT},  // Used by eMMC flash memory card
+  {name: 'P8_18', direction: b.OUTPUT},  // Used by eMMC flash memory card
+  {name: 'P8_19', direction: b.OUTPUT},  // Used by eMMC flash memory card
+  {name: 'P8_26', direction: b.OUTPUT},
