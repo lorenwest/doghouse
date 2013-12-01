@@ -147,8 +147,7 @@ IC74HC595.prototype.get = function(pin) {
 }
 
 /**
- * Shift the current values out to the chip(s), starting with the last
- * 595 in the array, and ending with the first 595 in the array.
+ * Shift the current values out to the chip(s)
  *
  * @method
  * @shiftOut
@@ -158,15 +157,15 @@ IC74HC595.prototype.shiftOut = function(callback) {
   var t = this;
   callback = callback || function(){};
 
-  // Shift out a full 595 chip
+  // Shift out one chip at a time
   var shift = function(chipNumber) {
     var value = t.values[chipNumber];
     b.shiftOut(t.pins.data, t.pins.clock, b.MSBFIRST, value, function(err) {
-      var nextChip = chipNumber - 1;
+      var nextChip = chipNumber + 1;
       if (err) {
         return callback({err:err, msg:'Error shifting data out ' + t.pins.data});
       }
-      if (nextChip >= 0) {
+      if (nextChip < t.values.lengh) {
         return shift(nextChip);
       }
 
@@ -175,8 +174,8 @@ IC74HC595.prototype.shiftOut = function(callback) {
     });
   }
 
-  // Shift out the last chip first
-  shift(t.values.length - 1);
+  // Shift out the first value
+  shift(0);
 };
 
 /**
