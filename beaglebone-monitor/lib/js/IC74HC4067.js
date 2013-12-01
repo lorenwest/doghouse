@@ -4,6 +4,7 @@ var BBUtils = require('./BBUtils');
 
 /**
  *  This module drives the 74HC4067 16-channel analog mixer
+ *  or the 74HC4051 8 channel equivalent
  *
  *  This IC acts like a rotary switch, switching in/out voltage
  *  from pin 1 (common I/O) through I0-I15.
@@ -63,7 +64,7 @@ var IC74HC4067 = module.exports = function(config, callback) {
       if (error) {
         return callback(error);
       }
-   
+
       // Set initial switch position
       t.switch(t.position, function(error) {
         if (error) {

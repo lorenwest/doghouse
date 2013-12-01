@@ -31,7 +31,8 @@
   }
 
   // Testing - create a test IO board
-  global.testBoard = new Monitor({probeClass:'RemoteIOBoard', initParams:{
+  /*
+  global.testBoard = new Monitor({probeClass:'IOBoard', initParams:{
     sleepMs: 1000,
     pins: {
       data: 'P9_11',
@@ -57,7 +58,6 @@
       {name: 'i14'},
       {name: 'i15'}
     ],
-    inputSwitchPosition: 8,
     outputs: [
       {name: 'o0'},
       {name: 'o1', initialValue: 1},
@@ -75,6 +75,38 @@
       {name: 'o13', initialValue: 1},
       {name: 'o14'},
       {name: 'o15', initialValue: 1}
+    ]
+  }});
+  global.testBoard.connect();
+  */
+
+  // Testing - create a test IO board
+  global.testBoard = new Monitor({probeClass:'InputBoard', initParams:{
+    sleepMs: 1000,
+    pins: {
+      data0: 'P9_11',
+      data1: 'P9_12',
+      data2: 'P9_13',
+      data3: 'P9_14',
+      input: 'P9_16'
+    },
+    inputs: [
+      {name: 'i0'},
+      {name: 'i1'},
+      {name: 'i2'},
+      {name: 'i3'},
+      {name: 'i4'},
+      {name: 'i5'},
+      {name: 'i6'},
+      {name: 'i7'},
+      {name: 'i8'},
+      {name: 'i9'},
+      {name: 'i10'},
+      {name: 'i11'},
+      {name: 'i12'},
+      {name: 'i13'},
+      {name: 'i14'},
+      {name: 'i15'}
     ]
   }});
   global.testBoard.connect();

@@ -1,4 +1,4 @@
-// RemoteIOBoard.js (c) 2013 Loren West
+// IOBoard.js (c) 2013 Loren West
 // May be freely distributed under the MIT license.
 // For further details and documentation:
 // http://lorenwest.github.com/beaglebone-monitor
@@ -8,16 +8,23 @@ var Monitor = require('monitor'),
     Bonescript = require('bonescript'),
     BBUtils = require('../js/BBUtils'),
     IC595 = require('../js/IC74HC595'),
-    logger = Monitor.getLogger('RemoteIOBoard');
+    logger = Monitor.getLogger('IOBoard');
 
 // Constants
 ANALOG_INPUT_PINS = ['P9_33','P9_35','P9_36','P9_37','P9_38','P9_39','P9_40'];
 
 /**
-* Probe for the remote I/O board
+* The I/O board is a tradeoff of speed for a single cable.  Use it when:
+*
+* 1) You need both inputs and outputs
+* 2) You want only 1 ethernet cable vs 1 for input, 1 for output
+* 3) You don't mind waiting 1 second to scan 16 inputs
 *
 * The remote IO board is a custom board designed to provide up to
-* 32 digital and/or analog inputs, and any number of digital outputs.
+* 16 digital and/or analog inputs, and any number of digital outputs.
+*
+* It's a combination of an InputBoard and and OutputBoard, where the first
+* chip of output controls the input.
 *
 * IO Board      Wire Color        BeagleBone
 * ------------|-----------------|-------------------------------------------
@@ -32,7 +39,7 @@ ANALOG_INPUT_PINS = ['P9_33','P9_35','P9_36','P9_37','P9_38','P9_39','P9_40'];
 *
 * For more information about the board design, see: [TODO]
 *
-* @class RemoteIOBoard
+* @class IOBoard
 * @constructor
 * @param initParams {Object} Probe initialization parameters
 * @param [initParams.sleepMs=100] {Integer} Milliseconds to sleep after polling
@@ -47,15 +54,14 @@ ANALOG_INPUT_PINS = ['P9_33','P9_35','P9_36','P9_37','P9_38','P9_39','P9_40'];
 * @param initParams.inputs {Object Array} Array defining all input positions.
 * @param initParams.inputs.n.name {String} Name of the probe variable to use
 * @param [initParams.inputs.n.description] {String} Human description of the input
-* @param [initParams.inputSwitchPosition=16] {Integer 8 or 16} Switch from inputIC_1 to inputIC_2 at this position
 * @param initParams.outputs {Object Array} Array defining all output positions.
 * @param initParams.outputs.n.name {String} Name of the probe variable to use
 * @param [initParams.outputs.n.description] {String} Human description of the input
 * @param [initParams.outputs.n.initialValue=0] {Integer} Initial output value (0 or 1)
 */
-var RemoteIOBoard = Probe.extend({
+var IOBoard = Probe.extend({
 
-  probeClass: 'RemoteIOBoard',
+  probeClass: 'IOBoard',
 
   // Called by Backbone.Model on object construction
   initialize: function(options){
@@ -70,7 +76,6 @@ var RemoteIOBoard = Probe.extend({
     t.sleepMs = (typeof options.sleepMs === 'undefined') ? 100 : options.sleepMs;
     t.inputs = options.inputs;
     t.numInputs = t.inputs.length;
-    t.inputSwitchPosition = options.inputSwitchPosition;
     t.outputs = options.outputs;
     t.numOutputs = t.outputs.length;
     t.num595chips = 1 + Math.ceil(t.numOutputs / 8);
@@ -78,20 +83,13 @@ var RemoteIOBoard = Probe.extend({
     t.isAnalogInput = ANALOG_INPUT_PINS.indexOf(t.pins.input) >= 0;
     t.readFn = t.isAnalogInput ? Bonescript.analogRead : Bonescript.digitalRead;
     t.timer = null;  // Timer before next heartbeat
+    t.cyanide = false;
     t.validOutputNames = [];
     t.ic595Array = []; // One element per 595 chip
     t.first595 = [0];  // First 595 chip (controller)
     t.currentInput = 0;
     t.currentOutputLatch = 0;
     t.outputQueued = false;
-
-    // Validate the input switch position (either 8 or 16)
-    if (typeof options.inputSwitchPosition === 'undefined') {
-      t.inputSwitchPosition = 16;
-    }
-    if (t.inputSwitchPosition !== 16 && t.inputSwitchPosition !== 8) {
-      logger.error('initialize', 'Can only switch input ICs at position 8 or 16');
-    }
 
     // Build the named data model elements
     t.inputs.forEach(function(input){
@@ -117,7 +115,9 @@ var RemoteIOBoard = Probe.extend({
 
       // Initialize the 595 ICs.  One of the zeros is for the
       // enable line in the secondary 959s, keeping all outputs disabled.
+console.log('initializing 595', t.ic595Array);
       t.ic595 = new IC595(t.pins, t.ic595Array, function(error) {
+console.log('595 initialized');
         if (error) {
           logger.error('595init', error);
           return callback(error);
@@ -125,12 +125,25 @@ var RemoteIOBoard = Probe.extend({
 
         // Queue the current outputs to be sent
         t.queueOutputs();
+console.log('Outputs queued');
 
         // Perform the first full heartbeat, and callback from initialize
         // once all inputs have been read.
         t.nextHeartbeat(callback);
       });
     });
+  },
+
+  // Shut down the probe
+  release: function() {
+    var t = this;
+    if (t.timer) {
+      clearTimeout(t.timer);
+      t.timer = null;
+    }
+    else {
+      t.cyanide = true;
+    }
   },
 
   // This changes the output pin states, and sets up for sending those
@@ -160,7 +173,6 @@ var RemoteIOBoard = Probe.extend({
 
     // Queue outputs for sending on the next rotation
     t.outputQueued = true;
-console.log('Outputs queued');
   },
 
   // Heartbeat processing.  One heartbeat reads each input, and sends output
@@ -204,14 +216,11 @@ console.log('Outputs queued');
       // 1: InputData1
       // 2: InputData2
       // 3: InputData3
-      // 4: Input1Enable - Enable input IC 1 (!input2Enable)
-      // 5: Input2Enable - Enable input IC 2 (!input1Enable)
+      // 4: not used
+      // 5: not used
       // 6: OutputEnable - (always on after first output)
       // 7: OutputLatch  - High on output now, low on next cycle
-      var input1 = t.currentInput < t.inputSwitchPosition;
-      t.ic595.values[0] = input1 ? t.currentInput : t.currentInput - t.inputSwitchPosition; // This sets 0-3 to the input switch location
-      t.ic595.set(4, input1 ? 1 : 0);
-      t.ic595.set(5, input1 ? 0 : 1);
+      t.ic595.values[0] = t.currentInput;  // This sets 0-3 to the input switch location
       t.ic595.set(6, 1);
       t.currentOutputLatch = t.outputQueued ? 1 : 0;
       t.ic595.set(7, t.currentOutputLatch);
@@ -228,13 +237,14 @@ console.log('Outputs queued');
         // We're done with the rotation if we're back around to zero and we
         // don't have to do another round to reset the output latch.
         if (t.currentInput === 0 && t.currentOutputLatch === 0) {
-          logger.info('heartbeat', 'complete in ' + Date.now() - startStamp + ' ms.');
-console.log('heartbeat complete in ' + (Date.now() - startStamp) + ' ms.');
+          logger.info('heartbeat', 'complete in ' + (Date.now() - startStamp) + ' ms.');
 
-          // Set up for the next heartbeat
-          t.timer = setTimeout(function() {
-            t.nextHeartbeat();
-          }, t.sleepMs);
+          // Set up for the next heartbeat, or stop the heart
+          if (!t.cyanide) {
+            t.timer = setTimeout(function() {
+              t.nextHeartbeat();
+            }, t.sleepMs);
+          }
 
           // We're done with the rotation
           if (callback) {
