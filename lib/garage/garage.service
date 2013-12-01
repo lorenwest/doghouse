@@ -1,0 +1,14 @@
+[Unit]
+Description=Westronics Garage
+ConditionPathExists=/home/root/doghouse/lib/garage/garage.js
+
+[Service]
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=boiler
+EnvironmentFile=/etc/default/node
+WorkingDirectory=/home/root/doghouse/lib/garage
+ExecStart=/usr/bin/node garage.js
+
+[Install]
+WantedBy=multi-user.target
