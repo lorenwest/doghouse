@@ -117,7 +117,7 @@ var IOBoard = Probe.extend({
       // Initialize the 595 ICs.  One of the zeros is for the
       // enable line in the secondary 959s, keeping all outputs disabled.
 console.log('initializing 595', t.ic595Array);
-      t.ic595 = new IC595(t.pins, t.ic595Array, function(error) {
+      t.ic595 = new IC595({pins:t.pins, values:t.ic595Array}, function(error) {
 console.log('595 initialized');
         if (error) {
           logger.error('595init', error);

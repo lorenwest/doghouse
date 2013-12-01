@@ -80,6 +80,7 @@
   global.testBoard.connect();
   */
 
+  /*
   // Testing - create a test IO board
   global.testBoard = new Monitor({probeClass:'InputBoard', initParams:{
     sleepMs: 20,
@@ -107,6 +108,36 @@
       {name: 'i13'},
       {name: 'i14'},
       {name: 'i15'}
+    ]
+  }});
+  global.testBoard.connect();
+  */
+
+  // Testing - create a test IO board
+  global.testBoard = new Monitor({probeClass:'OutputBoard', initParams:{
+    pins: {
+      data: 'P9_11',
+      clock: 'P9_12',
+      latch: 'P9_13',
+      enable: 'P9_14'
+    },
+    outputs: [
+      {name: 'o0'},
+      {name: 'o1', initialValue: 1},
+      {name: 'o2'},
+      {name: 'o3', initialValue: 1},
+      {name: 'o4'},
+      {name: 'o5', initialValue: 1},
+      {name: 'o6'},
+      {name: 'o7', initialValue: 1},
+      {name: 'o8'},
+      {name: 'o9', initialValue: 1},
+      {name: 'o10'},
+      {name: 'o11', initialValue: 1},
+      {name: 'o12'},
+      {name: 'o13', initialValue: 1},
+      {name: 'o14'},
+      {name: 'o15', initialValue: 1}
     ]
   }});
   global.testBoard.connect();

@@ -38,20 +38,24 @@ var BBUtils = require('./BBUtils');
  *
  * @class IC74HC595
  * @constructor
- * @param pins {Object} Pin definitions
- * @param   pins.data {String} Data pin name ex: "P9_18"
- * @param   pins.clock {String} Clock pin name ex: "P9_22"
- * @param   pins.latch {String} Latch pin name ex: "P9_17"
- * @param   [pins.enable] {String} Enable (OE) pin name ex: "P9_21"
- * @param   [pins.clear] {String} Hardware Clear (MR) pin name ex: "P9_19"
- * @param values {int or [int]} Initial pin values.  A single small int for
- *          driving one chip, an array of int values for multiple chained chips.
+ * @param config {object} Configuration
+ * @param   config.pins {Object} Pin definitions
+ * @param     config.pins.data {String} Data pin name ex: "P9_18"
+ * @param     config.pins.clock {String} Clock pin name ex: "P9_22"
+ * @param     config.pins.latch {String} Latch pin name ex: "P9_17"
+ * @param     [config.pins.enable] {String} Enable (OE) pin name ex: "P9_21"
+ * @param     [config.pins.clear] {String} Hardware Clear (MR) pin name ex: "P9_19"
+ * @param   config.values {int or [int]} Initial pin values.  A single small int for
+ *               driving one chip, an array of int values for multiple chained chips.
+ * @param   [config.enabled=true] {boolean} Enable on initialization?
  * @param [callback] {function(error)} Callback to run after initialization
  */
-var IC74HC595 = module.exports = function(pins, values, callback) {
-  var t = this;
-  t.pins = pins;
-  t.values = Array.isArray(values) ? values : [values];
+var IC74HC595 = module.exports = function(config, callback) {
+  var t = this,
+      enabled = typeof config.enabled === 'undefined' ? true : config.enabled;
+  t.config = config;
+  t.pins = config.pins;
+  t.values = Array.isArray(config.values) ? config.values : [config.values];
   callback = callback || function(){};
 
   // Set the pin modes and initial state, then shift out the initial values
@@ -63,7 +67,12 @@ var IC74HC595 = module.exports = function(pins, values, callback) {
       if (error) {
         return callback(error);
       }
-      t.enableOutput(callback);
+      if (enabled) {
+        t.enableOutput(callback);
+      }
+      else {
+        t.disableOutput(callback);
+      }
     });
   });
 
