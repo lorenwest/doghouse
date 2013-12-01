@@ -161,9 +161,7 @@ IC74HC595.prototype.shiftOut = function(callback) {
   // Shift out a full 595 chip
   var shift = function(chipNumber) {
     var value = t.values[chipNumber];
-console.log('Shifting out chip: ' + chipNumber);
     b.shiftOut(t.pins.data, t.pins.clock, b.MSBFIRST, value, function(err) {
-console.log('CB from shift out chip: ' + chipNumber);
       var nextChip = chipNumber - 1;
       if (err) {
         return callback({err:err, msg:'Error shifting data out ' + t.pins.data});
@@ -173,7 +171,6 @@ console.log('CB from shift out chip: ' + chipNumber);
       }
 
       // Done shifting out.  Latch now.
-console.log('Done shifting.  Latching now.');
       t._latch(callback);
     });
   }

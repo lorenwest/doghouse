@@ -117,9 +117,7 @@ var RemoteIOBoard = Probe.extend({
 
       // Initialize the 595 ICs.  One of the zeros is for the
       // enable line in the secondary 959s, keeping all outputs disabled.
-console.log('initializing 595', t.ic595Array);
       t.ic595 = new IC595(t.pins, t.ic595Array, function(error) {
-console.log('595 initialized');
         if (error) {
           logger.error('595init', error);
           return callback(error);
@@ -127,7 +125,6 @@ console.log('595 initialized');
 
         // Queue the current outputs to be sent
         t.queueOutputs();
-console.log('Outputs queued');
 
         // Perform the first full heartbeat, and callback from initialize
         // once all inputs have been read.
@@ -163,6 +160,7 @@ console.log('Outputs queued');
 
     // Queue outputs for sending on the next rotation
     t.outputQueued = true;
+console.log('Outputs queued');
   },
 
   // Heartbeat processing.  One heartbeat reads each input, and sends output
@@ -231,6 +229,7 @@ console.log('Outputs queued');
         // don't have to do another round to reset the output latch.
         if (t.currentInput === 0 && t.currentOutputLatch === 0) {
           logger.info('heartbeat', 'complete in ' + Date.now() - startStamp + ' ms.');
+console.log('heartbeat complete in ' + (Date.now() - startStamp) + ' ms.');
 
           // Set up for the next heartbeat
           t.timer = setTimeout(function() {
