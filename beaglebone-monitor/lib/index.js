@@ -2,7 +2,7 @@
 (function(root){
 
   // Create a server, and expose this directory
-  var Monitor = require('monitor'),
+  var Monitor = global.Monitor,
       Connect = require('connect'),
       FS = require('fs'),
       Path = require('path'),
@@ -59,23 +59,24 @@
     ],
     inputSwitchPosition: 8,
     outputs: [
-      {name: 'i0'},
-      {name: 'i1', initialValue: 1},
-      {name: 'i2'},
-      {name: 'i3', initialValue: 1},
-      {name: 'i4'},
-      {name: 'i5', initialValue: 1},
-      {name: 'i6'},
-      {name: 'i7', initialValue: 1},
-      {name: 'i8'},
-      {name: 'i9', initialValue: 1},
-      {name: 'i10'},
-      {name: 'i11', initialValue: 1},
-      {name: 'i12'},
-      {name: 'i13', initialValue: 1},
-      {name: 'i14'},
-      {name: 'i15', initialValue: 1}
+      {name: 'o0'},
+      {name: 'o1', initialValue: 1},
+      {name: 'o2'},
+      {name: 'o3', initialValue: 1},
+      {name: 'o4'},
+      {name: 'o5', initialValue: 1},
+      {name: 'o6'},
+      {name: 'o7', initialValue: 1},
+      {name: 'o8'},
+      {name: 'o9', initialValue: 1},
+      {name: 'o10'},
+      {name: 'o11', initialValue: 1},
+      {name: 'o12'},
+      {name: 'o13', initialValue: 1},
+      {name: 'o14'},
+      {name: 'o15', initialValue: 1}
     ]
   }});
+  global.testBoard.connect();
 
 }(this));

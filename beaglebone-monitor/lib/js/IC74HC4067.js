@@ -1,6 +1,6 @@
 
 var b = require('bonescript');
-var bb = require('./bb');
+var BBUtils = require('./BBUtils');
 
 /**
  *  This module drives the 74HC4067 16-channel analog mixer
@@ -109,7 +109,7 @@ IC74HC4067.prototype._setPinModes = function(callback) {
   }
 
   // Initialize the BB pins
-  bb.initGPIO(modes, callback);
+  BBUtils.initGPIO(modes, callback);
 
 };
 

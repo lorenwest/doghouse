@@ -7,7 +7,7 @@ var Monitor = require('monitor'),
     Config = Monitor.Config,
     Bonescript = require('bonescript'),
     BBUtils = require('../js/BBUtils'),
-    IC595 = require('../js/IC74H595'),
+    IC595 = require('../js/IC74HC595'),
     logger = Monitor.getLogger('RemoteIOBoard');
 
 // Constants
@@ -76,12 +76,12 @@ var RemoteIOBoard = Probe.extend({
     t.num595chips = 1 + Math.ceil(t.numOutputs / 8);
     t.ic595 = null;
     t.isAnalogInput = ANALOG_INPUT_PINS.indexOf(t.pins.input) >= 0;
-    t.readFn = isAnalogInput ? Bonescript.analogRead : Bonescript.digitalRead;
+    t.readFn = t.isAnalogInput ? Bonescript.analogRead : Bonescript.digitalRead;
     t.timer = null;  // Timer before next heartbeat
     t.validOutputNames = [];
     t.ic595Array = []; // One element per 595 chip
     t.first595 = [0];  // First 595 chip (controller)
-    t.currentInputNum = 0;
+    t.currentInput = 0;
     t.currentOutputLatch = 0;
     t.outputQueued = false;
 
@@ -89,7 +89,7 @@ var RemoteIOBoard = Probe.extend({
     if (typeof options.inputSwitchPosition === 'undefined') {
       t.inputSwitchPosition = 16;
     }
-    if (t.inputSwitchPosition !== 16 && t.inputSwitchPostion !== 8) {
+    if (t.inputSwitchPosition !== 16 && t.inputSwitchPosition !== 8) {
       logger.error('initialize', 'Can only switch input ICs at position 8 or 16');
     }
 
@@ -107,20 +107,32 @@ var RemoteIOBoard = Probe.extend({
       t.ic595Array.push(0);
     }
 
-    // Initialize the 595 ICs.  One of the zeros is for the
-    // enable line in the secondary 959s, keeping all outputs disabled.
-    t.ic595 = new IC595(pins, t.ic595Array, function(error) {
+    // Initialize the input pin
+    var modes = [{name: t.pins.input, direction: Bonescript.INPUT}];
+    BBUtils.initGPIO(modes, function(error) {
       if (error) {
-        logger.error('595init', error);
+        logger.error('GPIO Init', error);
         return callback(error);
       }
 
-      // Queue the current outputs to be sent
-      t.queueOutputs();
+      // Initialize the 595 ICs.  One of the zeros is for the
+      // enable line in the secondary 959s, keeping all outputs disabled.
+console.log('initializing 595', t.ic595Array);
+      t.ic595 = new IC595(t.pins, t.ic595Array, function(error) {
+console.log('595 initialized');
+        if (error) {
+          logger.error('595init', error);
+          return callback(error);
+        }
 
-      // Perform the first full heartbeat, and callback from initialize
-      // once all inputs have been read.
-      t.nextHeartbeat(callback);
+        // Queue the current outputs to be sent
+        t.queueOutputs();
+console.log('Outputs queued');
+
+        // Perform the first full heartbeat, and callback from initialize
+        // once all inputs have been read.
+        t.nextHeartbeat(callback);
+      });
     });
   },
 
@@ -137,7 +149,7 @@ var RemoteIOBoard = Probe.extend({
     }
 
     // Set the 595 values to the full array including outputs
-    var current595values = t.ic595.values;
+    var current595Values = t.ic595.values;
     t.ic595.values = t.ic595Array;
 
     // Set each output value into the array
@@ -204,7 +216,7 @@ var RemoteIOBoard = Probe.extend({
       t.ic595.set(5, input1 ? 0 : 1);
       t.ic595.set(6, 1);
       t.currentOutputLatch = t.outputQueued ? 1 : 0;
-      t.ic595.set(7, currentOutputLatch);
+      t.ic595.set(7, t.currentOutputLatch);
 
       // Reset the output queue
       if (t.outputQueued) {
@@ -247,8 +259,8 @@ var RemoteIOBoard = Probe.extend({
         else {
           // Set the input value if it's different.  This triggers a change immediately.
           var attrName = t.inputs[t.currentInput].name;
-          if (t.get(name) !== x.value) {
-            t.set(name, x.value);
+          if (t.get(attrName) !== x.value) {
+            t.set(attrName, x.value);
           }
         }
 

@@ -1,5 +1,5 @@
 var b = require('bonescript');
-var bb = require('./bb');
+var BBUtils = require('./BBUtils');
 
 /**
  *  This module drives the 74HC595 8-bit shift register.
@@ -98,7 +98,7 @@ IC74HC595.prototype._setPinModes = function(callback) {
   if (t.pins.clear) {
     modes.push({name: t.pins.clear, direction: b.OUTPUT, value: b.HIGH});
   }
-  bb.initGPIO(modes, callback);
+  BBUtils.initGPIO(modes, callback);
 
 };
 
@@ -147,7 +147,8 @@ IC74HC595.prototype.get = function(pin) {
 }
 
 /**
- * Shift the current values out to the chip(s)
+ * Shift the current values out to the chip(s), starting with the last
+ * 595 in the array, and ending with the first 595 in the array.
  *
  * @method
  * @shiftOut
@@ -157,25 +158,28 @@ IC74HC595.prototype.shiftOut = function(callback) {
   var t = this;
   callback = callback || function(){};
 
-  // Shift out one chip at a time
+  // Shift out a full 595 chip
   var shift = function(chipNumber) {
     var value = t.values[chipNumber];
+console.log('Shifting out chip: ' + chipNumber);
     b.shiftOut(t.pins.data, t.pins.clock, b.MSBFIRST, value, function(err) {
-      var nextChip = chipNumber + 1;
+console.log('CB from shift out chip: ' + chipNumber);
+      var nextChip = chipNumber - 1;
       if (err) {
         return callback({err:err, msg:'Error shifting data out ' + t.pins.data});
       }
-      if (nextChip < t.values.lengh) {
+      if (nextChip >= 0) {
         return shift(nextChip);
       }
 
       // Done shifting out.  Latch now.
+console.log('Done shifting.  Latching now.');
       t._latch(callback);
     });
   }
 
-  // Shift out the first value
-  shift(0);
+  // Shift out the last chip first
+  shift(t.values.length - 1);
 };
 
 /**
@@ -223,7 +227,7 @@ IC74HC595.prototype.enableOutput = function(callback) {
 
   // Initialize the GPIO pin if not done before
   if (t.enabled === undefined) {
-    bb.initGPIO({name: t.pins.enable, direction: b.OUTPUT, value:b.LOW}, function(err) {
+    BBUtils.initGPIO({name: t.pins.enable, direction: b.OUTPUT, value:b.LOW}, function(err) {
       if (err && err.err) {
         return callback({err: err, msg: 'Error enabling IC74HC595 output'});
       }
@@ -263,7 +267,7 @@ IC74HC595.prototype.disableOutput = function(callback) {
 
   // Initialize the GPIO pin if not done before
   if (t.enabled === undefined) {
-    bb.initGPIO({name: t.pins.enable, direction: b.OUTPUT, value:b.HIGH}, function(err) {
+    BBUtils.initGPIO({name: t.pins.enable, direction: b.OUTPUT, value:b.HIGH}, function(err) {
       if (err && err.err) {
         return callback({err: err, msg: 'Error disabling IC74HC595 output'});
       }
