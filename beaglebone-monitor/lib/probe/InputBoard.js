@@ -68,6 +68,7 @@ var InputBoard = Probe.extend({
     t.timer = null;  // Timer before next heartbeat
     t.cyanide = false;
     t.currentInput = 0;
+    t.heartbeatFn = function(){t.nextHeartbeat();};
 
     // Build the named data model elements
     t.inputs.forEach(function(input){
@@ -83,7 +84,7 @@ var InputBoard = Probe.extend({
       }
 
       // Initialize the IC.
-      t.ic = new IC4067(t.pins, function(error) {
+      t.ic = new IC4067({pins:t.pins}, function(error) {
         if (error) {
           logger.error('4067init', error);
           return callback(error);
@@ -147,9 +148,7 @@ console.log('heartbeat complete in ' + (Date.now() - startStamp) + ' ms.');
 
           // Set up for the next heartbeat, or stop the heart
           if (!t.cyanide) {
-            t.timer = setTimeout(function() {
-              t.nextHeartbeat();
-            }, t.sleepMs);
+            t.timer = setTimeout(t.heartbeatFn, t.sleepMs);
           }
 
           // We're done with the rotation

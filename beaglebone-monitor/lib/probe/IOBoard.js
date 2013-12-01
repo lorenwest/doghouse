@@ -90,6 +90,7 @@ var IOBoard = Probe.extend({
     t.currentInput = 0;
     t.currentOutputLatch = 0;
     t.outputQueued = false;
+    t.heartbeatFn = function(){t.nextHeartbeat();};
 
     // Build the named data model elements
     t.inputs.forEach(function(input){
@@ -241,9 +242,7 @@ console.log('Outputs queued');
 
           // Set up for the next heartbeat, or stop the heart
           if (!t.cyanide) {
-            t.timer = setTimeout(function() {
-              t.nextHeartbeat();
-            }, t.sleepMs);
+            t.timer = setTimeout(t.heartbeatFn, t.sleepMs);
           }
 
           // We're done with the rotation

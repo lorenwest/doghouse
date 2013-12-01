@@ -82,12 +82,12 @@
 
   // Testing - create a test IO board
   global.testBoard = new Monitor({probeClass:'InputBoard', initParams:{
-    sleepMs: 1000,
+    sleepMs: 20,
     pins: {
       data0: 'P9_11',
       data1: 'P9_12',
       data2: 'P9_13',
-      data3: 'P9_14',
+      data3: 'P9_17',
       input: 'P9_16'
     },
     inputs: [
