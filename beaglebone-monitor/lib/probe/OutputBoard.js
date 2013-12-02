@@ -79,9 +79,7 @@ var OutputBoard = Probe.extend({
 
     // Initialize the 595 library, but keep the chips disabled until
     // the values are set.
-console.log('initializing 595');
     t.ic595 = new IC595({pins: t.pins, values:t.ic595Array, enabled:false}, function(error) {
-console.log('595 initialized');
       if (error) {
         logger.error('595init', error);
         return callback(error);
@@ -110,7 +108,7 @@ console.log('595 initialized');
 
       // If the 595 is disabled, enable it now
       if (t.isDisabled) {
-        return t.ic595.enable(callback);
+        return t.ic595.enableOutput(callback);
       }
       callback();
     });
@@ -132,7 +130,7 @@ console.log('595 initialized');
     // Validate the param names and values
     var value = null;
     for (var paramName in outputs) {
-      if (t.validOutputsNames.indexOf(paramName) < 0) {
+      if (t.validOutputNames.indexOf(paramName) < 0) {
         var err = {msg: 'Invalid output param: "' + paramName + '"'};
         logger.error('setOutputs', err);
         return callback(err);
