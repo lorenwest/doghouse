@@ -52,7 +52,7 @@ var BBUtils = require('./BBUtils');
  */
 var IC74HC595 = module.exports = function(config, callback) {
   var t = this,
-      enabled = typeof config.enabled === 'undefined' ? true : config.enabled;
+      enable = typeof config.enabled === 'undefined' ? true : config.enabled;
   t.config = config;
   t.pins = config.pins;
   t.values = Array.isArray(config.values) ? config.values : [config.values];
@@ -63,22 +63,16 @@ var IC74HC595 = module.exports = function(config, callback) {
     if (error) {
       return callback(error);
     }
-    t.disableOutput(function(error) {
+    t.shiftOut(function(error) {
       if (error) {
         return callback(error);
       }
-
-      t.shiftOut(function(error) {
-        if (error) {
-          return callback(error);
-        }
-        if (enabled) {
-          t.enableOutput(callback);
-        }
-        else {
-          t.disableOutput(callback);
-        }
-      });
+      if (enable) {
+        t.enableOutput(callback);
+      }
+      else {
+        t.disableOutput(callback);
+      }
     });
   });
 
@@ -275,7 +269,6 @@ IC74HC595.prototype.disableOutput = function(callback) {
   var t = this;
   callback = callback || function(){};
 
-console.log('Disabling');
   // No-op if no enable pin defined
   if (!t.pins.enable) {
     return callback();

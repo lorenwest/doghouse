@@ -115,6 +115,7 @@ console.log('Setting ' + i + '(' + t.outputs[i].name + ') to ' + value);
 
       // If the 595 is disabled, enable it now
       if (t.isDisabled) {
+        t.isDisabled = false;
         return t.ic595.enableOutput(callback);
       }
       callback();

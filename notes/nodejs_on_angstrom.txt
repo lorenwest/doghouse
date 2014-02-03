@@ -18,14 +18,6 @@ tar xf *gz
 * Go into the distro and build
 cd *22
 ./configure --without-snapshot
-time make
+time make install
 
-* Wait about 90 minutes to finish, then
-make install
-
-
-*********** OR ************
-
-mkdir ~/node
-cd ~/node
-Unzip the node *.tz file into ~/node, cd to that dir, and make install
+* Then wait about 2 hours
