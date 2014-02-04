@@ -79,9 +79,7 @@ var InputBoard = Probe.extend({
 
     // Initialize the IC.
     var initIC = function() {
-console.log('Initializing input IC');
       t.ic = new IC4067({pins:t.pins}, function(error) {
-console.log('done initializing inputs');
         if (error) {
           logger.error('4067init', error);
           return callback(error);

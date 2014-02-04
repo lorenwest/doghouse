@@ -71,7 +71,7 @@ var IC74HC595 = module.exports = function(config, callback) {
         t.enableOutput(callback);
       }
       else {
-        t.disableOutput(callback);
+        callback();
       }
     });
   });
@@ -170,7 +170,6 @@ IC74HC595.prototype.shiftOut = function(callback) {
   // Shift out a full 595 chip
   var shift = function(chipNumber) {
     var value = t.values[chipNumber];
-console.log('Shifting out ', chipNumber, value);
     b.shiftOut(t.pins.data, t.pins.clock, b.MSBFIRST, value, function(err) {
       var nextChip = chipNumber - 1;
       if (err) {
@@ -201,7 +200,6 @@ IC74HC595.prototype._latch = function(callback) {
   var t = this;
 
   // Set the latch HIGH, then LOW
-console.log('Latching');
   b.digitalWrite(t.pins.latch, b.HIGH, function(err) {
     if (err && err.err) {
       return callback({err: err, msg: 'Error latching HIGH IC74HC595 registers'});
@@ -228,7 +226,6 @@ IC74HC595.prototype.enableOutput = function(callback) {
   var t = this;
   callback = callback || function(){};
 
-console.log('Enabling');
   // No-op if if no enable pin defined
   if (!t.pins.enable) {
     return callback();
@@ -280,7 +277,7 @@ IC74HC595.prototype.disableOutput = function(callback) {
       if (err && err.err) {
         return callback({err: err, msg: 'Error disabling IC74HC595 output'});
       }
-      t.enabled = true;
+      t.enabled = false;
       return callback();
     });
     return;
@@ -291,7 +288,7 @@ IC74HC595.prototype.disableOutput = function(callback) {
     if (err && err.err) {
       return callback({err: err, msg: 'Error disabling IC74HC595 output'});
     }
-    t.enabled = true;
+    t.enabled = false;
     return callback();
   });
 };

@@ -70,16 +70,15 @@ var OutputBoard = Probe.extend({
     // Build the named data model elements
     t.outputs.forEach(function(output){
       t.validOutputNames.push(output.name);
-      t.set(output.name, output.initialValue ? 1 : 0, {silent:true});
+      var value = output.initalValue ? 1 : 0;
+      t.set(output.name, value, {silent:true});
     });
 
     // Initialize the 959 array with zeros
     for (var i = 0; i < t.num595chips; i++) {
-      t.ic595Array.push(0);
+      t.ic595Array.push(255);
     }
 
-console.log('t.outputs', t.outputs);
-console.log('595 Array: ', t.ic595Array);
     // Initialize the 595 library, but keep the chips disabled until
     // the values are set.
     t.ic595 = new IC595({pins: t.pins, values:t.ic595Array, enabled:false}, function(error) {
@@ -104,7 +103,6 @@ console.log('595 Array: ', t.ic595Array);
         value = value ? 0 : 1;
       }
       t.ic595.set(i, value);
-console.log('Setting ' + i + '(' + t.outputs[i].name + ') to ' + value);
     }
 
     // Now shift them out
@@ -133,11 +131,9 @@ console.log('Setting ' + i + '(' + t.outputs[i].name + ') to ' + value);
     var t = this;
     callback = callback || function(){};
     if (typeof(params.enabled) === 'undefined' || params.enabled) {
-console.log('enabling output', enabled);
       t.ic595.enableOutput(callback);
     }
     else {
-console.log('disabling output');
       t.ic595.disableOutput(callback);
     }
   },
