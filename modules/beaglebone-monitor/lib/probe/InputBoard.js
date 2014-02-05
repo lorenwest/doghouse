@@ -44,8 +44,8 @@ ANALOG_INPUT_PINS = ['P9_33','P9_35','P9_36','P9_37','P9_38','P9_39','P9_40'];
 * @param initParams.inputs {Object Array} Array defining all inputs
 * @param initParams.inputs.n.name {String} Name of the probe variable to use
 * @param [initParams.inputs.n.description] {String} Human description of the input
-* @param [initParams.inputs.n.precision=.001] {Number} Precision for analog reading
-*                   Set to 1 for dry contact readings on an analog input
+* @param [initParams.inputs.n.precision=3] {Number} Number of digits to retain
+*                   past the decimal point (rounded). Dry contacts use 0 (for 0/1)
 */
 var InputBoard = Probe.extend({
 
@@ -180,8 +180,9 @@ var InputBoard = Probe.extend({
         else {
           // Set the input value if it's different.  This triggers a change immediately.
           var attrName = t.inputs[t.currentInput].name;
-          var precision = t.inputs[t.currentInput].precision || .001;
-          var attrValue = Math.round(x.value / precision) * precision;
+          var precision = t.inputs[t.currentInput].precision;
+          precision = typeof precision === 'undefined' ? 3 : precision;
+          var attrValue = +x.value.toFixed(precision);
           if (t.get(attrName) !== attrValue) {
             t.set(attrName, attrValue);
           }
