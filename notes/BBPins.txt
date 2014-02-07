@@ -17,7 +17,7 @@ Known good GPIO pins - tested for OUTPUT (see /lib/common/pinTest.sh):
   {name: 'P9_13', direction: b.OUTPUT},
   {name: 'P9_14', direction: b.OUTPUT},
   {name: 'P9_15', direction: b.OUTPUT},
-  {name: 'P9_16', direction: b.OUTPUT},
+  ?{name: 'P9_16', direction: b.OUTPUT},?
   {name: 'P9_17', direction: b.OUTPUT},
   {name: 'P9_18', direction: b.OUTPUT},
   {name: 'P9_21', direction: b.OUTPUT},
