@@ -1,0 +1,23 @@
+{
+  "id": "/no-beaglebone/index",
+  "title": "No Beaglebone",
+  "description": "These pages work without a beaglebone",
+  "components": [
+    {
+      "id": "c0",
+      "viewClass": "core.Probe",
+      "viewOptions": {
+        "title": "Local Beaglebone",
+        "background": true
+      },
+      "css": {
+        ".nm-cv": "top:10px; z-index:1; left:0px;",
+        ".nm-cv-viewport": "height:430px; width:500px;"
+      },
+      "monitor": {
+        "probeClass": "BeagleBone",
+        "appInstance": "1"
+      }
+    }
+  ]
+}
