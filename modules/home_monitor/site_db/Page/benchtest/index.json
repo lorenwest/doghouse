@@ -1,0 +1,22 @@
+{
+  "id": "/benchtest/index",
+  "title": "Bench Test",
+  "components": [
+    {
+      "id": "c0",
+      "viewClass": "core.Probe",
+      "viewOptions": {
+        "title": "Probe Viewer",
+        "background": true
+      },
+      "css": {
+        ".nm-cv": "top:10px; z-index:1; left:0px;",
+        ".nm-cv-viewport": "height:400px; width:560px;"
+      },
+      "monitor": {
+        "probeClass": "BeagleBone",
+        "hostName": "bb-pantry"
+      }
+    }
+  ]
+}
