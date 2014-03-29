@@ -3,7 +3,7 @@
 # This provisions a BeagleBone Black the way I like it.  
 # scp it to the BBB and run as root.
 #
-#     scp BBBProvision.sh root@192.168.1.XXX/~
+#     scp BBBProvision.sh root@192.168.1.XXX:~
 
 # Set known hosts here
 cat << HERE > /etc/hosts
@@ -20,6 +20,12 @@ cat << HERE > /etc/hosts
 192.168.1.53	bb-pantry
 192.168.1.54	bb4
 192.168.1.54	bb-benchtest
+192.168.1.55	bb5
+192.168.1.55	bb-cabin1
+192.168.1.56	bb6
+192.168.1.56	bb-med1
+192.168.1.57	bb7
+192.168.1.57	bb-med2
 192.168.1.201	hotwall-1
 192.168.1.202	hotwall-2
 140.211.169.179	feeds.angstrom-distribution.org

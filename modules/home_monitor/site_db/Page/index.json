@@ -1,4 +1,23 @@
 {
   "id": "/index",
-  "title": "Home - BeagleBone Monitor"
+  "title": "West Home Monitoring",
+  "components": [
+    {
+      "id": "c0",
+      "viewClass": "core.WebView",
+      "viewOptions": {
+        "title": "",
+        "background": true,
+        "siteUrl": "http://wellcam:big%2Cbucks@192.168.1.22:1022/live.htm",
+        "scrollBars": false,
+        "offsetTop": 0,
+        "offsetLeft": 0
+      },
+      "css": {
+        ".nm-cv": "top:10px; z-index:1; left:0px;",
+        ".nm-cv-viewport": "height:499px; width:655px;"
+      },
+      "monitor": {}
+    }
+  ]
 }
