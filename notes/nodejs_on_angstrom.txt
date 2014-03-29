@@ -1,3 +1,11 @@
+Quick install:
+
+scp ../../node-bb.tar.gz root@bb-XXX:~
+ssh root@bb-XXX
+tar xvf node-bb.tar.gz
+cd node/node-v0.10.22
+make install
+
 Installing a fresh Node.js on Angstrom:
 
 * Add the following to /etc/hosts:
