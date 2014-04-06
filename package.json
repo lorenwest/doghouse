@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "dependencies": {
     "bonescript" : ">=0.2.4 <0.3.0",
-    "monitor": ">=0.6.7 <0.7.0",
+    "monitor": ">=0.6.9 <0.7.0",
     "beaglebone-monitor": ">=0.1.0 <0.2.0"
   }
 }
