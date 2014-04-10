@@ -2,6 +2,8 @@ Quick install:
 
 scp ../../node-bb.tar.gz root@bb-XXX:~
 ssh root@bb-XXX
+opkg update
+opkg install python-simplejson
 tar xvf node-bb.tar.gz
 cd node/node-v0.10.22
 make install
