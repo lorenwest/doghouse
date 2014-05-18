@@ -8,7 +8,7 @@ StandardError=syslog
 SyslogIdentifier=boiler
 EnvironmentFile=/etc/default/node
 WorkingDirectory=/home/root/doghouse/lib/boiler
-ExecStart=/usr/bin/node boiler.js
+ExecStart=/usr/local/bin/node boiler.js
 
 [Install]
 WantedBy=multi-user.target

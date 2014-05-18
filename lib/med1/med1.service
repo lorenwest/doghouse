@@ -8,7 +8,7 @@ StandardError=syslog
 SyslogIdentifier=med1
 EnvironmentFile=/etc/default/node
 WorkingDirectory=/home/root/doghouse/lib/med1
-ExecStart=/usr/bin/node med1.js
+ExecStart=/usr/local/bin/node med1.js
 
 [Install]
 WantedBy=multi-user.target
