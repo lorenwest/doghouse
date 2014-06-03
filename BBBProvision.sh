@@ -169,7 +169,8 @@ then
     echo "Disabling the cloud9 IDE"
     systemctl disable cloud9
     mv /lib/systemd/system/cloud9.service ~/backup/cloud9.service
-    systemctl disable bonescript-autorun
+    systemctl stop bonescript-autorun bonescript.socket bonescript
+    systemctl disable bonescript-autorun bonescript.socket bonescript
     mv /lib/systemd/system/bonescript-autorun.service ~/backup/bonescript-autorun.service
     systemctl --system daemon-reload
 fi
