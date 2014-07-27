@@ -188,6 +188,7 @@ then
   rm ssh.tar
   git config --global user.name "Loren West"
   git config --global user.email email@lorenwest.com
+  git config --global http.sslVerify false
   git clone git@github.com:lorenwest/doghouse.git
 fi
 
@@ -212,6 +213,12 @@ fi
 #   echo ""
 #   cd ..
 # fi
+
+# Download and install quick-vim
+git clone git://github.com/brianleroux/quick-vim.git
+cd quick-vim
+./quick-vim install
+cd ..
 
 # Manually set the nameserver (DHCP will be disabled)
 cd /var/lib/connman
