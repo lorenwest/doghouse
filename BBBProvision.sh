@@ -135,23 +135,9 @@ alias gcom='git checkout master'
 alias grb='git fetch origin; git rebase origin/master'
 alias gru='g remote update'
 alias gs='git status'
+export LC_CTYPE=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 THERE
-
-echo "Installing .vimrc"
-cat << EVERYWHERE > .vimrc
-:set tabstop=40
-:set softtabstop=2
-:set shiftwidth=2
-:set expandtab
-:set nobackup
-:set ignorecase
-:set number
-:set indentexpr=
-map [ :e#
-map ] :n
-map < :set nonumber
-map > :set number
-EVERYWHERE
 
 # Disable gnome desktop
 if test -f /lib/systemd/system/gdm.service
@@ -219,6 +205,73 @@ git clone git://github.com/brianleroux/quick-vim.git
 cd quick-vim
 ./quick-vim install
 cd ..
+
+echo "Installing .vimrc"
+cat << EVERYWHERE > .vimrc
+call pathogen#infect()
+syntax on
+filetype plugin indent on
+set nofoldenable
+set nocompatible
+set nobackup
+set nowb
+set noswapfile
+set ic
+
+" syntax highligting
+syntax enable
+set background=dark
+let g:solarized_termcolors=256
+set t_Co=16 " added for chromeos crosh chroot ubuntu
+" colorscheme solarized
+
+
+" quiet pls
+set visualbell t_vb=
+
+" turn OFF line numbers
+" set nonumber ...I go back and forth on this one
+
+" 4 space softabs default
+set expandtab
+set ts=4
+set sw=4
+
+" \+n toggles the nerdtree
+map <leader>n :NERDTreeToggle<CR>
+
+" ctrl f for jsbeautify
+" let g:jsbeautify = {"indent_size": 4, "indent_char": "\t"}
+" let g:jsbeautify_engine = "node"
+" map <c-f> :call JsBeautify()<cr>
+
+" 2 space coffeescript for the love of..
+au BufNewFile,BufReadPost *.coffee setl shiftwidth=2 expandtab
+
+" no need to fold things in markdown all the time
+let g:vim_markdown_folding_disabled = 1
+
+" LorenWest
+" export LC_CTYPE=en_US.UTF-8
+" export LC_ALL=en_US.UTF-8  
+set number
+map <leader>l <c-w>l
+map <leader>h <c-w>h
+map <leader>k <c-w>k
+map <leader>j <c-w>j
+map <leader>- <c-w>-
+map <leader>\ <c-w>p
+map <leader>= <c-w>+
+map [ :e#<CR>
+map ] :n<CR>
+map > :set number<CR>
+map < :set nonumber<CR>
+set background=light
+let NERDTreeShowBookmarks=1
+autocmd VimEnter * NERDTree
+autocmd VimEnter * wincmd p
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+EVERYWHERE
 
 # Manually set the nameserver (DHCP will be disabled)
 cd /var/lib/connman
