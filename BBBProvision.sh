@@ -268,7 +268,7 @@ map > :set number<CR>
 map < :set nonumber<CR>
 set background=light
 let NERDTreeShowBookmarks=1
-autocmd VimEnter * NERDTree
+autocmd VimEnter * NERDTreeFind
 autocmd VimEnter * wincmd p
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 EVERYWHERE
