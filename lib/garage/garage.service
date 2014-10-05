@@ -5,7 +5,7 @@ ConditionPathExists=/home/root/doghouse/lib/garage/garage.js
 [Service]
 StandardOutput=syslog
 StandardError=syslog
-SyslogIdentifier=boiler
+SyslogIdentifier=bb-garage
 EnvironmentFile=/etc/default/node
 WorkingDirectory=/home/root/doghouse/lib/garage
 ExecStart=/usr/local/bin/node garage.js
