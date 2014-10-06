@@ -1,0 +1,14 @@
+[Unit]
+Description=HighEnd Environment 1
+ConditionPathExists=/home/root/doghouse/lib/he-env1/he-env1.js
+
+[Service]
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=he-env1
+EnvironmentFile=/etc/default/node
+WorkingDirectory=/home/root/doghouse/lib/he-env1
+ExecStart=/usr/local/bin/node he-env1.js
+
+[Install]
+WantedBy=multi-user.target
