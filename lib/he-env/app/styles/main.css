@@ -1,0 +1,94 @@
+body {
+  padding-top: 50px;
+  padding-bottom: 20px;
+}
+
+/* Set widths on the navbar form inputs since otherwise they're 100% wide */
+.navbar-form input[type="text"],
+.navbar-form input[type="password"] {
+  width: 180px;
+}
+
+/* Wrapping element */
+/* Set some basic padding to keep content from hitting the edges */
+.body-content {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/* Responsive: Portrait tablets and up */
+@media screen and (min-width: 768px) {
+  /* Let the jumbotron breathe */
+  .jumbotron {
+    margin-top: 20px;
+  }
+  /* Remove padding from wrapping element since we kick in the grid classes here */
+  .body-content {
+    padding: 0;
+  }
+
+  .nav-collapse.collapse {
+    float:right !important;
+  }
+
+  .autoManual {
+      margin-top:18px;
+  }
+}
+
+.navbar-brand {
+    max-width: 260px;
+    font-size: 19px;
+}
+.navbar-nav {
+    margin-left: 15px;
+}
+
+.nav-collapse.collapse {
+    float:none;
+}
+
+.nav-pills > li > a {
+    border: 3px solid transparent;
+    cursor: pointer;
+}
+
+.waterPumpLabel {
+    margin: 0px 0px 45px 0px;
+}
+
+.txtMessage {
+    font-size: 16px;
+    font-weight: 400;
+    color: #888888;
+    border-radius: 4px;
+    border:1px solid #888888;
+    margin: 60px 0px 20px 0px;
+    line-height: 1.4em;
+    background-color: transparent;
+    padding: 10px;
+}
+
+.txtMessage.override {
+    background-color: rgb(252,212,136);
+    color: #666666;
+}
+
+.btn-group[data-toggle="buttons"] > .btn > input[type="radio"]
+{
+    display: none;
+}
+
+.btn-primary {
+    color: #888888;
+    font-weight: 400;
+    background-color: transparent;
+}
+
+.btn-primary.active,
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active {
+    color: white;
+}

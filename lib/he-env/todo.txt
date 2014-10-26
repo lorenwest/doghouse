@@ -1,0 +1,109 @@
+Yes:
+
+  recipes: [
+    ...array of RecipeProbe monitors to run...
+    Each element has an order value, to insert into the setRule
+  ]
+
+Recipe:
+  One trigger         : Currently defined by RecipeProbe.triggeredBy
+    + trigger script
+  One action
+
+Trigger
+  A probe with specific attribute values
+    (ultimately a script triggered on any change of the
+     above probe that returns true)
+  Any probe attributes & user defined values
+
+  garageProbe:
+    lightSwitchOn: true
+
+Action
+  Any probe that has a 'run' control
+
+ActionSequence recipe:
+  * Triggered by regular recipe triggers (cron/at/attribute)
+  * Array of:
+    * Action (switch settings)
+    * Delay
+    * Action
+    * Delay
+    * End or Repeat
+
+
+
+I want a scheduler that knows the position of a control
+at any moment of time
+
+SchedulerRecipe?  Recipe triggered every second?
+* What value does it have as a recipe?
+  * Generic inclusion in list of recipes
+* One scheduler per control attribute?
+* One scheduler per control probe? (yes)
+* One scheduler per room?
+* Schedulers can control any attribute
+* One-time schedulers (at a higher order than all-time schedulers)
+* Scheduler instances
+
+* Action sequences
+  * Starting state
+  * Array of timeout, followed by state change
+
+How to represent triggers?
+  * As recipes
+
+How to represent actions (as code)?
+  * Script (default recipeProbe)
+    * Probe control methods (w/params - via script)
+
+How to represent actions (as data)?
+  * In the recipe probe definition
+    * As actionDef attributes?
+
+  ScriptAction: Run a script on a (set of) probes
+  SchedulingRecipe:
+
+
+  Recipes:
+    TriggeredBy:
+
+
+
+Ultimately, he-env is monitor-dashboard
+---------------------------------------
+* Want these features
+  * Data driven site
+  * Node-monitor integration
+  * Standardized component add-ons
+  * Tours
+  * About w/add-ons
+
+* Dashboard improvements
+  * Responsive, fluid layout
+  * Sidebar goes to menu
+  * Depth is hidden
+  * Page Templates (like Grafina)
+  * Update dependencies
+  * SIMPLIFY (remove backbone bubbling)
+
+But FOR NOW, it's a 1 page mobile app
+-------------------------------------
+
+    X  On         Off
+
+  Next: OFF at xx:xx:xx
+  Override: until xx:xx:xx
+
+Schedule
+
+  Cycles per day:      4
+  Minutes per cycle:   6 
+  First cycle starts:  04:00 am
+
+      12:00 am  OFF
+      04:00 am  ON
+      04:06 am  OFF
+      10:00 am  ON
+      10:06 am  OFF
+      ...
