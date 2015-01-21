@@ -119,9 +119,9 @@ fi
 
 echo "Resetting crontab"
 crontab << HERE
+@reboot /usr/bin/ntpdate -b -s -u pool.ntp.org
+30 * * * *  /usr/bin/ntpdate -b -s -u pool.ntp.org
 HERE
-# @reboot /usr/bin/ntpdate -b -s -u pool.ntp.org
-# 30 * * * *  /usr/bin/ntpdate -b -s -u pool.ntp.org
 
 echo "Installing .bash_profile"
 cat << THERE > .bash_profile

@@ -6,7 +6,7 @@ opkg update
 opkg install python-simplejson
 tar xvf node-bb.tar.gz
 cd node/node-v0.10.22
-make install
+python tools/install.py install
 
 Installing a fresh Node.js on Angstrom:
 
@@ -22,7 +22,8 @@ opkg install python-audio python-compression python-dbus-doc python-email python
 cd
 mkdir node
 cd node
-wget http://nodejs.org/dist/v0.10.22/node-v0.10.22.tar.gz
+// wget http://nodejs.org/dist/v0.10.22/node-v0.10.22.tar.gz
+wget http://nodejs.org/dist/v0.10.35/node-v0.10.35.tar.gz
 tar xf *gz
 
 * Go into the distro and build
